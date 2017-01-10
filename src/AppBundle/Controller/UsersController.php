@@ -15,7 +15,17 @@ class UsersController extends Controller
     {
         // Handle the login form
         if ($request->isMethod('POST')) {
-            
+            $repo = $this->getDoctrine()->getRepository('AppBundle:User');
+            $user = $repo->findOneBy([
+                'email' => $request->get('username'),
+                'password' => $request->get('password')
+            ]);
+
+            if (!$user) {
+                throw new \Exception('No user exists.');
+            }
+
+            return $this->redirectToRoute("welcome");
         }
 
         // Display the login form

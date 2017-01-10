@@ -2,12 +2,27 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
+        <title>{% block title %}Programming Challenge{% endblock %}</title>
+        <style type="text/css">
+          body {
+            font-family: sans-serif;
+            padding: 0;
+            margin: 0;
+          }
+
+          .container {
+            width: 800px;
+            margin: 0 auto;
+            padding: 1em;
+          }
+        </style>
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
+      <div class="container">
         {% block body %}{% endblock %}
         {% block javascripts %}{% endblock %}
+      </div>
     </body>
 </html>
