@@ -1,6 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+
+{% for flash_message in app.session.flashBag.get('error') %}
+  <div class="error">
+    <div>{{ flash_message }}</div>
+  </div>
+{% endfor %}
+
 <form name="login" action="/users/login" method="post">
   <div>
     <label for="username">Username</label><br />

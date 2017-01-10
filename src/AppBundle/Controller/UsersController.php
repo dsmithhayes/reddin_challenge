@@ -22,7 +22,8 @@ class UsersController extends Controller
             ]);
 
             if (!$user) {
-                throw new \Exception('No user exists.');
+                $this->get('session')->getFlashBag()->add('error', 'This user does not exist.');
+                return $this->render('users/login.html.twig');
             }
 
             return $this->redirectToRoute("welcome");
