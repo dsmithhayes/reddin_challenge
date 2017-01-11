@@ -25,8 +25,5 @@ security:
                 check_path: login
             # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
 
-    access_control:
-        - { path: ^/home/welcome, roles: ROLE_USER }
-
     encoders:
         AppBundle\Entity\User: bcrypt
