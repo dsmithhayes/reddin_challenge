@@ -22,7 +22,10 @@ class UsersController extends Controller
             return $this->redirect($this->generateUrl('login'));
         }
 
-        // assure the authorized user is the user in the URL
+        // assure the authorized user is the user referenced by `$id`
+
+        // check if the request was a POST
+            // update the database
 
         return $this->render('users/edit_user.html.twig');
     }
