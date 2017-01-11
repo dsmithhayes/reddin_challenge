@@ -2,17 +2,37 @@
 
 {% block body %}
 
+  <h1>Update User Information</h1>
+
 {% if not user and error %}
 
   <div class="error">This user does not exist.</div>
 
 {% else %}
 
-  <form name="edit" action="{{ path('edit_user') }}" method="post">
-    <label for="first_name">
-    <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" />
+  {% if success %}
+    <div class="success">Successfully updated the user.</div>
+  {% endif %}
 
-    <button type="submit">Submit</button>
+  <form name="edit" action="{{ path('edit_user', {'id': user.id}) }}" method="post">
+    <div>
+      <label for="first_name">First Name</label><br />
+      <input type="text" name="first_name" id="first_name" value="{{ user.firstName }}" />
+    </div>
+
+    <div>
+      <label for="last_name">Last Name</label><br />
+      <input type="text" name="last_name" id="last_name" value="{{ user.lastName }}" />
+    </div>
+
+    <div>
+      <label for="email">Email</label><br />
+      <input type="text" name="email" id="email" value="{{ user.email }}" />
+    </div>
+
+    <div>
+      <button type="submit">Submit</button>
+    </div>
   </form>
 
 {% endif %}

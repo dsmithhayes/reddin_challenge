@@ -48,22 +48,43 @@ class CsvImportCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $in, OutputInterface $out)
     {
+        // open the CSV file
         $fh = fopen($in->getArgument('path'), 'r');
+
+        // get Doctrine ready
         $doctrine = $this->getContainer()->get('doctrine');
         $usersRepo = $doctrine->getRepository('AppBundle:User');
         $entityManager = $doctrine->getManager();
 
+        // get the password encoder
+        $encoder = $this->getContainer()->get('security.password_encoder');
+
+        // parse the CSV to an associative array
         $rows = $this->parseCsv($fh);
+        fclose($fh);
 
         // input into the database
         foreach ($rows as $row) {
-            if ($usersRepo->findByEmail($row['email'])) {
-                $row['password'] = '';
-            } else {
-                $row['password'] = $row['first_name'];
+
+            // only update matching user data based on the email address
+            if ($tempUser = $usersRepo->findOneByEmail($row['email'])) {
+                $tempUser->setEmail($row['email'])
+                         ->setFirstName($row['first_name'])
+                         ->setLastName($row['last_name']);
+
+                $entityManager->merge($tempUser);
+                $entityManager->flush();
+
+                continue;
             }
 
+            // Set up a new User entity
             $user = new User();
+            $row['password'] = $row['first_name'];
+
+            // encode the password
+            $row['password'] = $encoder->encodePassword($user, $row['password']);
+
             $user->setEmail($row['email'])
                  ->setFirstName($row['first_name'])
                  ->setLastName($row['last_name'])

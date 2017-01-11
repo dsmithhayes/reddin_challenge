@@ -26,9 +26,7 @@ class UsersController extends Controller
 
         // assure the authorized user is the user referenced by `$id`
 
-        // check if the request was a POST
-            // update the database
-
+        // get the user repository
         $userRepo = $this->getDoctrine()->getRepository('AppBundle:User');
         $user = $userRepo->find($id);
 
@@ -36,9 +34,24 @@ class UsersController extends Controller
             $error = 'This user does not exist.';
         }
 
+        // check if the request was a POST, update the user info accordingly
+        if ($req->isMethod('POST')) {
+            $user->setFirstName($req->get('first_name'))
+                 ->setLastName($req->get('last_name'))
+                 ->setEmail($req->get('email'));
+
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->merge($user);
+
+            if ($entityManager->flush()) {
+                $success = true;
+            }
+        }
+
         return $this->render('users/edit_user.html.twig', [
             'user' => $user,
-            'error' => $error,
+            'error' => $error ?? null,
+            'success' => $success ?? null,
         ]);
     }
 }
