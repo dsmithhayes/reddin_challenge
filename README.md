@@ -1,3 +1,5 @@
+**Please read INSTRUCTIONS.MD for set up information about this project.**
+
 Symfony Standard Edition
 ========================
 
