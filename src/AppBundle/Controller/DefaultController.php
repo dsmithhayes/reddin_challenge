@@ -18,4 +18,18 @@ class DefaultController extends Controller
             'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..').DIRECTORY_SEPARATOR,
         ));
     }
+
+    /**
+     * @Route("/home/welcome", name="welcome")
+     */
+    public function welcomeAction(Request $request)
+    {
+        $authChecker = $this->get('security.authorization_checker');
+
+        if (!$authChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirect($this->generateUrl('login'));
+        }
+
+        return $this->render('home/welcome.html.twig');
+    }
 }

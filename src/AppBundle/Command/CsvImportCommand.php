@@ -18,9 +18,17 @@ class CsvImportCommand extends ContainerAwareCommand
      */
     const FIRST_NAME = 0;
 
-
+    /**
+     * @var int
+     *      The column index for the last name in the CSV data
+     */
     const LAST_NAME = 1;
-    const EMAIL         = 2;
+
+    /**
+     * @var int
+     *      The column index for the email in the CSV data
+     */
+    const EMAIL = 2;
 
     /**
      * The sole argument for the command is the path to the CSV file.
@@ -41,13 +49,29 @@ class CsvImportCommand extends ContainerAwareCommand
     protected function execute(InputInterface $in, OutputInterface $out)
     {
         $fh = fopen($in->getArgument('path'), 'r');
-        $container = $this->getContainer();
-        $usersRepo = $container->get('doctrine')
-                               ->getRepository('AppBundle:User');
+        $doctrine = $this->getContainer()->get('doctrine');
+        $usersRepo = $doctrine->getRepository('AppBundle:User');
+        $entityManager = $doctrine->getManager();
 
         $rows = $this->parseCsv($fh);
 
         // input into the database
+        foreach ($rows as $row) {
+            if ($usersRepo->findByEmail($row['email'])) {
+                $row['password'] = '';
+            } else {
+                $row['password'] = $row['email'];
+            }
+
+            $user = new User();
+            $user->setEmail($row['email'])
+                 ->setFirstName($row['first_name'])
+                 ->setLastName($row['last_name'])
+                 ->setPassword($row['password']);
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+        }
     }
 
     /**
@@ -81,9 +105,9 @@ class CsvImportCommand extends ContainerAwareCommand
             }
 
             $rows[] = [
-                $columnNames[self::FIRST_NAME]  => $data[self::FIRST_NAME],
-                $columnNames[self::LAST_NAME]   => $data[self::LAST_NAME],
-                $columnNames[self::EMAIL]       => $data[self::EMAIL]
+                $columnNames[self::FIRST_NAME] => $data[self::FIRST_NAME],
+                $columnNames[self::LAST_NAME]  => $data[self::LAST_NAME],
+                $columnNames[self::EMAIL]      => $data[self::EMAIL]
             ];
         }
 

@@ -2,34 +2,28 @@
 
 namespace AppBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class UsersController extends Controller
 {
     /**
-     * @Route("/users/login", name="users_login")
+     * @Route("/user/edit/{id}", name="edit_user")
+     *
+     * @param Request $req
+     * @param int $id
      */
-    public function loginAction(Request $request)
+    public function editAction(Request $req, $id)
     {
-        // Handle the login form
-        if ($request->isMethod('POST')) {
-            $repo = $this->getDoctrine()->getRepository('AppBundle:User');
-            $user = $repo->findOneBy([
-                'email' => $request->get('username'),
-                'password' => $request->get('password')
-            ]);
+        $authChecker = $this->get('security.authorization_checker');
 
-            if (!$user) {
-                $this->get('session')->getFlashBag()->add('error', 'This user does not exist.');
-                return $this->render('users/login.html.twig');
-            }
-
-            return $this->redirectToRoute("welcome");
+        if (!$authChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
+            return $this->redirect($this->generateUrl('login'));
         }
 
-        // Display the login form
-        return $this->render('users/login.html.twig');
+        // assure the authorized user is the user in the URL
+
+        return $this->render('users/edit_user.html.twig');
     }
 }
