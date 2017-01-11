@@ -14,19 +14,31 @@ class UsersController extends Controller
      * @param Request $req
      * @param int $id
      */
-    public function editAction(Request $req, $id)
+    public function editAction(Request $req, $id = null)
     {
+        /*
         $authChecker = $this->get('security.authorization_checker');
 
         if (!$authChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirect($this->generateUrl('login'));
         }
+        */
 
         // assure the authorized user is the user referenced by `$id`
 
         // check if the request was a POST
             // update the database
 
-        return $this->render('users/edit_user.html.twig');
+        $userRepo = $this->getDoctrine()->getRepository('AppBundle:User');
+        $user = $userRepo->find($id);
+
+        if (!$user) {
+            $error = 'This user does not exist.';
+        }
+
+        return $this->render('users/edit_user.html.twig', [
+            'user' => $user,
+            'error' => $error,
+        ]);
     }
 }

@@ -2,4 +2,18 @@
 
 {% block body %}
 
+{% if not user and error %}
+
+  <div class="error">This user does not exist.</div>
+
+{% else %}
+
+  <form name="edit" action="{{ path('edit_user') }}" method="post">
+    <label for="first_name">
+    <input type="text" name="first_name" id="first_name" value="{{ user.first_name }}" />
+
+    <button type="submit">Submit</button>
+  </form>
+
+{% endif %}
 {% endblock %}
