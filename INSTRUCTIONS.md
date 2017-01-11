@@ -25,3 +25,5 @@ the application is not entirely portable.
 To parse the users data into the database issue the following command:
 
     $ app/console csv:import-users csv/user-data.csv
+
+This command will take a while as it hashes a list of 100 passwords.
