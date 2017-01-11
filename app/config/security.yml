@@ -25,6 +25,10 @@ security:
                 login_path: login
                 check_path: login
 
+            logout:
+                path: /logout
+                target: /
+
     access_control:
         - { path: ^/user/edit$, roles: ROLE_ADMIN }
         - { path: ^/home/welcome, roles: ROLE_ADMIN }

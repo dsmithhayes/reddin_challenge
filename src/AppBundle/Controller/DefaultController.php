@@ -30,6 +30,11 @@ class DefaultController extends Controller
             return $this->redirect($this->generateUrl('login'));
         }
 
-        return $this->render('home/welcome.html.twig');
+        // get the user from the current session, deprecated but works in 2.8
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        return $this->render('home/welcome.html.twig', [
+            'user' => $user
+        ]);
     }
 }

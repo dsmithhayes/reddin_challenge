@@ -14,7 +14,11 @@
         </div>
         <div class="nav">
           <ul>
-            <li><a href="{{ path('login') }}">Login</a></li>
+            {% if app.user %}
+              <li><a href="/logout">Logout</a></li>
+            {% else %}
+              <li><a href="{{ path('login') }}">Login</a></li>
+            {% endif %}
           </ul>
         </div>
       </header>

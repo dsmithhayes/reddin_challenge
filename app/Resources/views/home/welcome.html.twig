@@ -4,6 +4,6 @@
   <h1>Welcome!</h1>
 
   <div>
-    <a href="{{ path('edit_user') }}">Edit Profile</a>
+    <a href="{{ path('edit_user', {'id': user.id}) }}">Edit Profile</a>
   </div>
 {% endblock %}

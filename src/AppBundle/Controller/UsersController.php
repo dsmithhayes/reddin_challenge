@@ -14,15 +14,21 @@ class UsersController extends Controller
      * @param Request $req
      * @param int $id
      */
-    public function editAction(Request $req, $id = null)
+    public function editAction(Request $req, $id)
     {
-        /*
         $authChecker = $this->get('security.authorization_checker');
 
         if (!$authChecker->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirect($this->generateUrl('login'));
         }
-        */
+
+        // deprecated, but works in 2.8
+        $currentUser = $this->get('security.context')->getToken()->getUser();
+
+        // assure its the current user
+        if ($currentUser->getId() !== (int) $id) {
+            return $this->redirect($this->generateUrl('welcome'));
+        }
 
         // assure the authorized user is the user referenced by `$id`
 
@@ -45,6 +51,8 @@ class UsersController extends Controller
                     $newPass = $encoder->encodePassword($user, $newPass);
                     $user->setPassword($newPass);
                 } else {
+
+                    // for some reason, this isn't being passed to the view
                     $error = 'Passwords do not match.';
                 }
             }
