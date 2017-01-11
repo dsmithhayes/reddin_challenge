@@ -18,7 +18,7 @@ class Session
     private $sessId;
 
     /**
-     * @ORM\Column(type="binary")
+     * @ORM\Column(type="blob")
      */
     private $sessData;
 
@@ -48,7 +48,7 @@ class Session
     /**
      * Get sessId
      *
-     * @return string 
+     * @return string
      */
     public function getSessId()
     {
@@ -71,7 +71,7 @@ class Session
     /**
      * Get sessData
      *
-     * @return binary 
+     * @return binary
      */
     public function getSessData()
     {
@@ -94,7 +94,7 @@ class Session
     /**
      * Get sessTime
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessTime()
     {
@@ -117,7 +117,7 @@ class Session
     /**
      * Get sessLifetime
      *
-     * @return integer 
+     * @return integer
      */
     public function getSessLifetime()
     {

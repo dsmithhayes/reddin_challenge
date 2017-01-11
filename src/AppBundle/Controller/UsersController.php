@@ -37,10 +37,15 @@ class UsersController extends Controller
         // check if the request was a POST, update the user info accordingly
         if ($req->isMethod('POST')) {
             if ($req->get('new_password')) {
-                if ($req->get('new_password') === $req->get('second_password')) {
-                    $user->setPassword($req->get('new_password'));
+                $newPass = $req->get('new_password');
+                $secondPass = $req->get('second_password');
+
+                if ($newPass === $secondPass) {
+                    $encoder = $this->get('security.password_encoder');
+                    $newPass = $encoder->encodePassword($user, $newPass);
+                    $user->setPassword($newPass);
                 } else {
-                    $error = 'Password do not match.';
+                    $error = 'Passwords do not match.';
                 }
             }
 
