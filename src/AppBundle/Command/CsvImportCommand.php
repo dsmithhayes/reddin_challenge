@@ -60,7 +60,7 @@ class CsvImportCommand extends ContainerAwareCommand
             if ($usersRepo->findByEmail($row['email'])) {
                 $row['password'] = '';
             } else {
-                $row['password'] = $row['email'];
+                $row['password'] = $row['first_name'];
             }
 
             $user = new User();
