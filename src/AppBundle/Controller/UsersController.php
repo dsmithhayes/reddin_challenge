@@ -37,15 +37,13 @@ class UsersController extends Controller
         // check if the request was a POST, update the user info accordingly
         if ($req->isMethod('POST')) {
             $user->setFirstName($req->get('first_name'))
-                 ->setLastName($req->get('last_name'))
-                 ->setEmail($req->get('email'));
+                 ->setLastName($req->get('last_name'));
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->merge($user);
 
-            if ($entityManager->flush()) {
-                $success = true;
-            }
+            $entityManager->flush();
+            $success = true;
         }
 
         return $this->render('users/edit_user.html.twig', [
